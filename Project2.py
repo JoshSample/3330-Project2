@@ -48,6 +48,9 @@ def insertionSort(arr):
     return arr, comparison
 
 
+M_COUNTER = 0
+
+
 # Merge Sort
 def merge_sort(arr):
     # The last array split
@@ -62,6 +65,7 @@ def merge_sort(arr):
 
 
 def merge(left, right, merged):
+    global M_COUNTER
     left_cursor, right_cursor = 0, 0
     while left_cursor < len(left) and right_cursor < len(right):
 
@@ -69,9 +73,11 @@ def merge(left, right, merged):
         if left[left_cursor] <= right[right_cursor]:
             merged[left_cursor + right_cursor] = left[left_cursor]
             left_cursor += 1
+            M_COUNTER += 1
         else:
             merged[left_cursor + right_cursor] = right[right_cursor]
             right_cursor += 1
+            M_COUNTER += 1
 
     for left_cursor in range(left_cursor, len(left)):
         merged[left_cursor + right_cursor] = left[left_cursor]
@@ -83,38 +89,61 @@ def merge(left, right, merged):
 
 
 # Quick Sort
-def quick_sort(ar):
-    # Base case
-    if len(ar) <= 1:
-        return ar
+def partition(arr, l, h):
+    i = (l - 1)
+    x = arr[h]
+    for j in range(l, h):
+        if arr[j] <= x:
+            # increment index of smaller element
+            i = i + 1
+            arr[i], arr[j] = arr[j], arr[i]
+    arr[i + 1], arr[h] = arr[h], arr[i + 1]
+    return i + 1
 
-        # Let us choose middle element a pivot
-    else:
-        mid = len(ar) // 2
-        pivot = ar[mid]
 
-        # key element is used to break the array
-        # into 2 halves according to their values
-        smaller, greater = [], []
-
-        # Put greater elements in greater list,
-        # smaller elements in smaller list. Also,
-        # compare positions to decide where to put.
-        for indx, val in enumerate(ar):
-            if indx != mid:
-                if val < pivot:
-                    smaller.append(val)
-                elif val > pivot:
-                    greater.append(val)
-
-                    # If value is same, then considering
-                # position to decide the list.
-                else:
-                    if indx < mid:
-                        smaller.append(val)
-                    else:
-                        greater.append(val)
-        return quick_sort(smaller) + [pivot] + quick_sort(greater)
+# Function to do Quick sort
+# arr[] --> Array to be sorted,
+# l  --> Starting index,
+# h  --> Ending index
+def quick_sort(arr, l, h):
+    comparison = 0
+    # Create an auxiliary stack
+    size = h - l + 1
+    stack = [0] * size
+    # initialize top of stack
+    top = -1
+    # push initial values of l and h to stack
+    top = top + 1
+    stack[top] = l
+    top = top + 1
+    stack[top] = h
+    # Keep popping from stack while is not empty
+    while top >= 0:
+        # Pop h and l
+        h = stack[top]
+        top = top - 1
+        l = stack[top]
+        top = top - 1
+        # Set pivot element at its correct position in
+        # sorted array
+        p = partition(arr, l, h)
+        # If there are elements on left side of pivot,
+        # then push left side to stack
+        if p - 1 > l:
+            top = top + 1
+            stack[top] = l
+            top = top + 1
+            stack[top] = p - 1
+            comparison += 1
+        # If there are elements on right side of pivot,
+        # then push right side to stack
+        if p + 1 < h:
+            top = top + 1
+            stack[top] = p + 1
+            top = top + 1
+            stack[top] = h
+            comparison += 1
+    return comparison
 
 
 # Driver for sorts
@@ -131,9 +160,11 @@ def main():
     # For bubble sort to have worst case, O(n*n), list should be in reverse order
     # This is also true for insertion
     bubble_insertion_worst = list(reversed(range(1, 10000)))
+    # I had to use a global variable to count comparisons in merge sort
+    global M_COUNTER
     # For quick sort to have it's worst case, n*n time, list needs to be sorted
     # thus variable worst_quick will have a sorted list
-    worst_quick = list(range(1, 1000000))
+    worst_quick = list(range(1, 10000))
 
     # Bubble Sort Performance
     print("Bubble Sort:" "\nAverage case O(n*n)")
@@ -208,21 +239,28 @@ def main():
     merge_sort(randar1)
     end = time.perf_counter()
     print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\t\tComparisons:", M_COUNTER)
+    M_COUNTER = 0
     print("\tRandom List of 100")
     start = time.perf_counter()
     merge_sort(randar2)
     end = time.perf_counter()
     print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\t\tComparisons:", M_COUNTER)
+    M_COUNTER = 0
     print("\tRandom List of 10,000")
     start = time.perf_counter()
     merge_sort(randar3)
     end = time.perf_counter()
     print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\t\tComparisons:", M_COUNTER)
+    M_COUNTER = 0
     print("\tRandom List of 1,000,000")
     start = time.perf_counter()
     merge_sort(randar4)
     end = time.perf_counter()
     print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\t\tComparisons:", M_COUNTER)
     print("\tMerge sort always has a time complexity of o(n log n),"
           "so therefor there is no real way to measure best/worse case.")
 
@@ -230,32 +268,35 @@ def main():
     print("Quick sort:" "\nAverage case O(n log n)")
     print("\tRandom List of 10")
     start = time.perf_counter()
-    quick_sort(randar1)
+    comparison = quick_sort(randar1, 0, randar1.__len__() - 1)
     end = time.perf_counter()
     print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\t\tComparisons:", comparison)
     print("\tRandom List of 100")
     start = time.perf_counter()
-    quick_sort(randar2)
+    comparison = quick_sort(randar2, 0, randar2.__len__() - 1)
     end = time.perf_counter()
     print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\t\tComparisons:", comparison)
     print("\tRandom List of 10,000")
     start = time.perf_counter()
-    quick_sort(randar3)
+    comparison = quick_sort(randar3, 0, randar3.__len__() - 1)
     end = time.perf_counter()
     print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\t\tComparisons:", comparison)
     print("\tRandom List of 1,000,000")
     start = time.perf_counter()
-    quick_sort(randar4)
+    comparison = quick_sort(randar4, 0, randar4.__len__() - 1)
     end = time.perf_counter()
     print("\t\tTime it took to sort:", end - start, "seconds")
-    print("\tWorst case O(n*n) (using list of 1,000,000")
+    print("\t\tComparisons:", comparison)
+    print("\tWorst case O(n*n) (using list of 10,000)")
     start = time.perf_counter()
-    quick_sort(worst_quick)
+    comparison = quick_sort(worst_quick, 0, worst_quick.__len__() - 1)
     end = time.perf_counter()
     print("\t\tTime it took to sort:", end - start, "seconds")
-    print("\t\tNote: for optimal worst case pivot should be at the start or end."
-          " Pivot for our sort started at the middle."
-          "\n\t\tAlso, best time complexity for quick sort is the same as the average case.")
+    print("\t\tComparisons:", comparison)
+    print("\t\tNote: best time complexity for quick sort is the same as the average case.")
 
 
 if __name__ == "__main__":

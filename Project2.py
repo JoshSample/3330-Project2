@@ -91,6 +91,29 @@ def main():
     # thus variable worst_quick will have a sorted list
     worst_quick = list(range(1, 1000000))
 
+    # Merge Sort performance
+    print("Merge sort time: ")
+    print("\tRandom List of 10")
+    start = time.perf_counter()
+    merge_sort(randar1)
+    end = time.perf_counter()
+    print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\tRandom List of 100")
+    start = time.perf_counter()
+    merge_sort(randar2)
+    end = time.perf_counter()
+    print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\tRandom List of 10000")
+    start = time.perf_counter()
+    merge_sort(randar3)
+    end = time.perf_counter()
+    print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\tRandom List of 1000000")
+    start = time.perf_counter()
+    merge_sort(randar4)
+    end = time.perf_counter()
+    print("\t\tTime it took to sort:", end - start, "seconds")
+
     # Quick Sort performance
     print("Quick sort time: ")
     print("\tRandom List of 10")

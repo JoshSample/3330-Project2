@@ -8,6 +8,24 @@ import time
 
 
 # Bubble Sort
+def bubble_sort(arr):
+    def swap(i, j):
+        arr[i], arr[j] = arr[j], arr[i]
+
+    n = len(arr)
+    swapped = True
+
+    x = -1
+    while swapped:
+        swapped = False
+        x = x + 1
+        for i in range(1, n - x):
+            if arr[i - 1] > arr[i]:
+                swap(i - 1, i)
+                swapped = True
+
+    return arr
+
 
 # Insertion Sort
 
@@ -91,6 +109,29 @@ def main():
     # thus variable worst_quick will have a sorted list
     worst_quick = list(range(1, 1000000))
 
+    # Bubble Sort Performance
+    print("Bubble Sort time: ")
+    print("\tRandom List of 10")
+    start = time.perf_counter()
+    bubble_sort(randar1)
+    end = time.perf_counter()
+    print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\tRandom List of 100")
+    start = time.perf_counter()
+    bubble_sort(randar2)
+    end = time.perf_counter()
+    print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\tRandom List of 10000")
+    start = time.perf_counter()
+    bubble_sort(randar3)
+    end = time.perf_counter()
+    print("\t\tTime it took to sort:", end - start, "seconds")
+    # print("\tRandom List of 1000000")
+    # start = time.perf_counter()
+    # bubble_sort(randar4)
+    # end = time.perf_counter()
+    # print("\t\tTime it took to sort:", end - start, "seconds")
+
     # Merge Sort performance
     print("Merge sort time: ")
     print("\tRandom List of 10")
@@ -120,27 +161,27 @@ def main():
     start = time.perf_counter()
     quick_sort(randar1)
     end = time.perf_counter()
-    print("\t\tTime it took to sort:", end-start, "seconds")
+    print("\t\tTime it took to sort:", end - start, "seconds")
     print("\tRandom List of 100")
     start = time.perf_counter()
     quick_sort(randar2)
     end = time.perf_counter()
-    print("\t\tTime it took to sort:", end-start, "seconds")
+    print("\t\tTime it took to sort:", end - start, "seconds")
     print("\tRandom List of 10000")
     start = time.perf_counter()
     quick_sort(randar3)
     end = time.perf_counter()
-    print("\t\tTime it took to sort:", end-start, "seconds")
+    print("\t\tTime it took to sort:", end - start, "seconds")
     print("\tRandom List of 1000000")
     start = time.perf_counter()
     quick_sort(randar4)
     end = time.perf_counter()
-    print("\t\tTime it took to sort:", end-start, "seconds")
+    print("\t\tTime it took to sort:", end - start, "seconds")
     print("\tTesting worst case (n*n)")
     start = time.perf_counter()
     quick_sort(worst_quick)
     end = time.perf_counter()
-    print("\t\tTime it took to sort:", end-start, "seconds")
+    print("\t\tTime it took to sort:", end - start, "seconds")
 
 
 if __name__ == "__main__":

@@ -105,6 +105,10 @@ def main():
     randar2 = [random.randrange(0, 100) for i in range(100)]
     randar3 = [random.randrange(0, 10000) for i in range(10000)]
     randar4 = [random.randrange(0, 1000000) for i in range(1000000)]
+    # For bubble sort to have best case, O(n), list needs to be already sorted
+    bubble_best = list(range(1, 10000))
+    # For bubble sort to have worst case, O(n*n), list should be in reverse order
+    bubble_worst = list(reversed(range(1, 10000)))
     # For quick sort to have it's worst case, n*n time, list needs to be sorted
     # thus variable worst_quick will have a sorted list
     worst_quick = list(range(1, 1000000))
@@ -126,11 +130,18 @@ def main():
     bubble_sort(randar3)
     end = time.perf_counter()
     print("\t\tTime it took to sort:", end - start, "seconds")
-    # print("\tRandom List of 1000000")
-    # start = time.perf_counter()
-    # bubble_sort(randar4)
-    # end = time.perf_counter()
-    # print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\tBest case O(n):")
+    start = time.perf_counter()
+    bubble_sort(bubble_best)
+    end = time.perf_counter()
+    print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\tWorst case O(n*n):")
+    start = time.perf_counter()
+    bubble_sort(bubble_worst)
+    end = time.perf_counter()
+    print("\t\tTime it took to sort:", end - start, "seconds")
+
+    # Insertion Sort Performance
 
     # Merge Sort performance
     print("Merge sort time: ")
@@ -177,11 +188,13 @@ def main():
     quick_sort(randar4)
     end = time.perf_counter()
     print("\t\tTime it took to sort:", end - start, "seconds")
-    print("\tTesting worst case (n*n)")
+    print("\tWorst case O(n*n)")
     start = time.perf_counter()
     quick_sort(worst_quick)
     end = time.perf_counter()
     print("\t\tTime it took to sort:", end - start, "seconds")
+    print("\t\tNote: for optimal worst case pivot should be at the start or end."
+          " Pivot for our sort started at the middle.")
 
 
 if __name__ == "__main__":
